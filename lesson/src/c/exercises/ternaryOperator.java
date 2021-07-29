@@ -9,7 +9,8 @@ public class ternaryOperator
 		double a = Math.random();
 		System.out.println(a);
 		//ternary Operator as in three 
-		String m = a > 0.5 ? "big" : "small";
+		String m;
+		m = a > 0.5 ? "big" : "small";
 		System.out.println(m);
 		
 		System.out.println(Random.Integer(1, 10));
