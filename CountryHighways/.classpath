@@ -3,6 +3,7 @@
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/JavaSE-15">
 		<attributes>
 			<attribute name="module" value="true"/>
+			<attribute name="limit-modules" value="jdk.management.jfr,jdk.charsets,jdk.xml.dom,jdk.jstatd,jdk.httpserver,jdk.jcmd,java.se,jdk.zipfs,jdk.javadoc,jdk.jshell,jdk.editpad,jdk.jsobject,jdk.sctp,java.smartcardio,jdk.jlink,jdk.nio.mapmode,jdk.dynalink,jdk.unsupported.desktop,jdk.accessibility,jdk.security.jgss,jdk.hotspot.agent,jdk.crypto.cryptoki,jdk.net,jdk.naming.rmi,jdk.jconsole,jdk.crypto.mscapi,jdk.internal.vm.compiler.management,jdk.security.auth,jdk.aot,jdk.jartool,jdk.naming.dns,jdk.localedata"/>
 		</attributes>
 	</classpathentry>
 	<classpathentry kind="src" path="src"/>

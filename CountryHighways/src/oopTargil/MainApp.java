@@ -28,7 +28,7 @@ public class MainApp {
 		System.out.println("number of cars in country is: " + israel.numOfCarsInCountry());
 		System.out.println();
 
-		//print all country highway information
+		// print all country highway information
 		// refactor into Country class for encapsulation
 		israel.countryHighwaysInformation();
 
@@ -37,10 +37,6 @@ public class MainApp {
 		israel.countryMostTrafficAndAverageSpeed();
 
 	}
-	
-
-
-	
 
 	/**
 	 * Print method to print large formated arrays
