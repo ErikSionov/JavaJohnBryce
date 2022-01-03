@@ -14,6 +14,8 @@ public class MainApp {
 		
 		System.out.println(input);
 		
+		sc.close();
+		
 	}
 	
 }

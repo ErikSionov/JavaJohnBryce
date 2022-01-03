@@ -1,6 +1,9 @@
-package characterCreator;
+package mainMenu;
 
 import java.util.Scanner;
+
+import characterCreator.Character;
+import characterCreator.Race;
 
 public class MainApp {
 
@@ -10,7 +13,7 @@ public class MainApp {
 		Character player01 = new Character("Drago");
 		player01.setRace(Race.randomRace());
 		System.out.println(player01.getStats()[0].mod());
-//		player01.getStatsInfo();
+		player01.getStatsInfo();
 		System.out.println("Welcome to a character creation screen\n" + "choose your race: HUMAN, DWARF, ELF, ORC, HALFLING");
 		while(true) {
 			try {
