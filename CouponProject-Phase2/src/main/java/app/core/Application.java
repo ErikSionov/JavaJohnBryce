@@ -13,10 +13,9 @@ public class Application {
 
 	public static void main(String[] args) {
 		ConfigurableApplicationContext ctx = SpringApplication.run(Application.class, args);
-
-		//===================================//
+		//===========================================================//
 		//========TESTS RUNNING FROM APP.CORE.TESTS PACKAGE==========//
-		//===================================//
+		//===========================================================//
 		
 		try {
 			Thread.sleep(10);
