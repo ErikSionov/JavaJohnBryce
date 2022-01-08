@@ -17,5 +17,5 @@ public abstract class ClientService {
 	protected CustomerRepository customerRepository;
 	
 	public abstract boolean login(String email, String password) throws CouponSystemException;
-	
+	//TODO add login manager?!
 }

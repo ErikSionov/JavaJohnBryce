@@ -1,0 +1,69 @@
+package app.core;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.ApplicationContext;
+import org.springframework.stereotype.Component;
+
+import app.core.exceptions.CouponSystemException;
+import app.core.services.AdminService;
+import app.core.services.ClientService;
+import app.core.services.CompanyService;
+import app.core.services.CustomerService;
+
+@Component
+public class LoginManager {
+	
+	@Autowired
+	private ApplicationContext ctx;
+	
+	/** login manager to log into system using credentials from DB.
+	 * while <code>ClientType</code> used to indicate the DB login() method used from one of the client services.
+	 * @param email user email
+	 * @param password user password
+	 * @param clientType enum based on client types
+	 * @return 
+	 * @return a service type based by ClientType enum
+	 * @throws CouponSystemException if login would fail for some reason
+	 */
+	public ClientService login(String email, String password, ClientType clientType) throws CouponSystemException {
+		
+		try {
+			switch (clientType) {
+				case ADMINISTRATOR :
+					AdminService adminF = ctx.getBean(AdminService.class);
+					if (adminF.login(email, password)) {
+						return adminF;
+					}else {
+						adminF = null;
+						return null;
+					}
+
+				case COMPANY :
+					CompanyService compF = ctx.getBean(CompanyService.class);
+					if (compF.login(email, password)) {
+						return compF;
+					}
+					compF = null;
+					return null;
+
+				case CUSTOMER :
+					CustomerService custF = ctx.getBean(CustomerService.class);
+					if (custF.login(email, password)) {
+						return custF;
+					}
+					custF = null;
+					return null;
+					
+				default :
+					System.out.println("login() in loginManager failed, clientType not supported");
+					return null;
+			}
+		} catch (CouponSystemException e) {
+			System.out.println("login() in loginManager failed");
+			return null;
+		}
+
+	}
+
+}
+

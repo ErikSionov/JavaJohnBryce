@@ -17,6 +17,8 @@ public class Application {
 		//========TESTS RUNNING FROM APP.CORE.TESTS PACKAGE==========//
 		//===========================================================//
 		
+		LoginManager lm = ctx.getBean(LoginManager.class);
+		
 		try {
 			Thread.sleep(10);
 		} catch (InterruptedException e) {

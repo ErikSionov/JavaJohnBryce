@@ -8,11 +8,14 @@ import org.springframework.boot.CommandLineRunner;
 import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
 
+import app.core.ClientType;
+import app.core.LoginManager;
 import app.core.entities.Category;
 import app.core.entities.Company;
 import app.core.entities.Coupon;
 import app.core.entities.Customer;
 import app.core.services.AdminService;
+import app.core.services.ClientService;
 
 @Component
 @Order(1)
@@ -21,12 +24,16 @@ public class AdminTests implements CommandLineRunner {
 	@Autowired
 	AdminService adminService;
 
+	@Autowired
+	LoginManager loginManager;
+	
 	@Override
 	public void run(String... args) throws Exception {
 
 		System.out.println("================================");
 		System.out.println(">>>>>>>>> ADMIN TESTS <<<<<<<<<<");
 
+		doLoginManagerTest();
 		doAdminLoginTestSuccess();
 		doAdminLoginTestFail();
 		doAddCompany();
@@ -46,10 +53,23 @@ public class AdminTests implements CommandLineRunner {
 		System.out.println("");
 	}
 
+	private void doLoginManagerTest() {
+		System.out.println("");
+		System.out.println("================================");
+		System.out.println("=== login manager test");
+		
+		ClientService clientService = loginManager.login("admin@admin.com", "admin", ClientType.ADMINISTRATOR);
+		if(clientService instanceof AdminService) {
+			System.out.println("> test result SUCCESS: loginManager.login() returned adminService");
+		}else {
+			System.out.println("> test result Failed: check if login information present in application.properties, or have been changed");
+		}
+	}
+
 	private void doAdminLoginTestSuccess() {
 		System.out.println("");
 		System.out.println("================================");
-		System.out.println("=== admin login test with correct credentials");
+		System.out.println("=== admin login() test with correct credentials");
 
 		boolean check = adminService.login("admin@admin.com", "admin");
 		if (check == true) {
@@ -62,7 +82,7 @@ public class AdminTests implements CommandLineRunner {
 	private void doAdminLoginTestFail() {
 		System.out.println("");
 		System.out.println("================================");
-		System.out.println("=== admin login test with incorrect credentials");
+		System.out.println("=== admin login() test with incorrect credentials");
 
 		boolean check = adminService.login("", "");
 		if (check == true) {

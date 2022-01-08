@@ -95,6 +95,7 @@ public class AdminService extends ClientService {
 			List<Customer> list = customerRepository.findByFirstNameOrEmail(null, customer.getEmail());
 			if (list.isEmpty()) {
 				customerRepository.save(customer);
+				System.out.println("customer added with id: " + customer.getId());
 			} else {
 				throw new AdminServiceException("can't add customer with same email.");
 			}

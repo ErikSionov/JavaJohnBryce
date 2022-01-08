@@ -1,6 +1,7 @@
 package app.core.tests;
 
 import java.time.LocalDate;
+import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
@@ -47,11 +48,11 @@ public class CompanyTests implements CommandLineRunner {
 		System.out.println("================================");
 		System.out.println("=== company login test with correct credentials");
 
-		Company testCompany = new Company(0,"couponTestingCompany","coupons@mail","coupons", null);
+		Company testCompany = new Company(0, "couponTestingCompany", "coupons@mail", "coupons", null);
 		try {
 			adminService.addCompany(testCompany);
 		} catch (Exception e) {
-			testCompany = adminService.checkIfCompanyExistsByNameOrEmail(testCompany.getName(),testCompany.getEmail());
+			testCompany = adminService.checkIfCompanyExistsByNameOrEmail(testCompany.getName(), testCompany.getEmail());
 		}
 		boolean check = companyService.login(testCompany.getEmail(), testCompany.getPassword());
 		if (check == true) {
@@ -78,16 +79,20 @@ public class CompanyTests implements CommandLineRunner {
 		System.out.println("");
 		System.out.println("================================");
 		System.out.println("=== company addCoupon() test with new coupon");
-		Coupon testCoupon = new Coupon(0, null, Category.ELECTRONICS, "test addCoupon()", "testing addCoupon()", LocalDate.of(2022, 5, 5),LocalDate.of(2024, 1,1),100,15.5,"testImage01.jpg");
-		try {
-			companyService.addCoupon(testCoupon);
-			System.out.println("> test result SUCCESS: added coupon to company: " + testCoupon);
-		} catch (Exception e) {
-			testCoupon = companyService.getCouponByTitle(testCoupon.getTitle());
-			System.err.println("> test result FAILED: couldn't add coupon: " + e.getMessage());
+		Coupon testCoupon = new Coupon(0, null, Category.ELECTRONICS, "test addCoupon()", "testing addCoupon()", LocalDate.of(2022, 5, 5), LocalDate.of(2024, 1, 1), 100, 15.5, "testImage01.jpg");
+		Coupon testCoupon2 = new Coupon(0, null, Category.ELECTRONICS, "test addCoupon() 2", "testing addCoupon() 2", LocalDate.of(2022, 5, 5), LocalDate.of(2024, 1, 1), 100, 15.5, "testImage01.jpg");
+		Coupon testCoupon3 = new Coupon(0, null, Category.ELECTRONICS, "test addCoupon() 3", "testing addCoupon() 3", LocalDate.of(2022, 5, 5), LocalDate.of(2024, 1, 1), 100, 15.5, "testImage01.jpg");
+		List<Coupon> list = List.of(testCoupon, testCoupon2, testCoupon3);
+		for (Coupon coupon : list) {
+			try {
+				companyService.addCoupon(coupon);
+				System.out.println("> test result SUCCESS: added coupon to company: " + coupon);
+			} catch (Exception e) {
+				System.err.println("> test result FAILED: couldn't add coupon: " + e.getMessage());
+			}
 		}
 	}
-	
+
 	private void doGetCoupon() {
 		System.out.println("");
 		System.out.println("================================");
@@ -100,7 +105,7 @@ public class CompanyTests implements CommandLineRunner {
 			System.err.println("> test result FAILED: couldn't get coupon from company: " + e.getMessage());
 		}
 	}
-	
+
 	private void doUpdateCoupon() {
 		System.out.println("");
 		System.out.println("================================");
@@ -117,7 +122,7 @@ public class CompanyTests implements CommandLineRunner {
 			System.err.println("> test result FAILED: couldn't update coupon from company: " + e.getMessage());
 		}
 	}
-	
+
 	private void doUpdateCouponWithDiffrentCompany() {
 		System.out.println("");
 		System.out.println("================================");
@@ -128,7 +133,7 @@ public class CompanyTests implements CommandLineRunner {
 			testCoupon.setCategory(Category.HOME);
 			testCoupon.setDescription("test description update");
 			testCoupon.setTitle("check title update");
-			Company testCompany = new Company(0,"testCouponCompany", "testcoupon@mail","12345",null);
+			Company testCompany = new Company(0, "testCouponCompany", "testcoupon@mail", "12345", null);
 			testCoupon.setCompany(testCompany);
 			companyService.updateCoupon(testCoupon);
 			System.err.println("> test result FAILED: updated coupon with diffrent company entity: " + testCoupon);
@@ -136,12 +141,12 @@ public class CompanyTests implements CommandLineRunner {
 			System.out.println("> test result SUCCESS: failed as intended: " + e.getMessage());
 		}
 	}
-	
+
 	private void doDeleteCoupon() {
 		System.out.println("");
 		System.out.println("================================");
 		System.out.println("=== company deleteCoupon() test with new coupon");
-		Coupon testCoupon = new Coupon(0, null, Category.ELECTRONICS, "test deleteCoupon()", "testing deletecoupon()", LocalDate.of(2022, 5, 5),LocalDate.of(2024, 1,1),100,15.5,"testDeleteImage01.jpg");
+		Coupon testCoupon = new Coupon(0, null, Category.ELECTRONICS, "test deleteCoupon()", "testing deletecoupon()", LocalDate.of(2022, 5, 5), LocalDate.of(2024, 1, 1), 100, 15.5, "testDeleteImage01.jpg");
 		try {
 			companyService.addCoupon(testCoupon);
 			companyService.deleteCoupon(testCoupon.getId());
@@ -150,7 +155,7 @@ public class CompanyTests implements CommandLineRunner {
 			System.err.println("> test result FAILED: couldn't update coupon from company: " + e.getMessage());
 		}
 	}
-	
+
 	private void doGetCompanyDetails() {
 		System.out.println("");
 		System.out.println("================================");
@@ -162,5 +167,5 @@ public class CompanyTests implements CommandLineRunner {
 			System.err.println("> test result FAILED: couldn't retrive company details: " + e.getMessage());
 		}
 	}
-	
+
 }
