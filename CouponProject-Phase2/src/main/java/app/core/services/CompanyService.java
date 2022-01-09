@@ -22,12 +22,16 @@ public class CompanyService extends ClientService {
 	
 	@Override
 	public boolean login(String email, String password) throws CompanyServiceException {
-		Company company = companyRepository.findByEmailAndPassword(email, password);
-		if (company != null) {
-			companyId = company.getId();
-			return true;
-		} else {
-			return false;
+		try {
+			Company company = companyRepository.findByEmailAndPassword(email, password);
+			if (company != null) {
+				companyId = company.getId();
+				return true;
+			} else {
+				return false;
+			}
+		} catch (Exception e) {
+			throw new CompanyServiceException("company Login() ERROR: " + e.getMessage());
 		}
 	}
 

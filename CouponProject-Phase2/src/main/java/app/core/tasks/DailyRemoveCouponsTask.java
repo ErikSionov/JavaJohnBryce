@@ -1,7 +1,6 @@
 package app.core.tasks;
 
 import java.time.LocalDate;
-import java.util.concurrent.TimeUnit;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Scheduled;
@@ -9,17 +8,30 @@ import org.springframework.stereotype.Component;
 
 import app.core.services.AdminService;
 
+/**scheduled task of deleting expired coupons to be run on application start and every 24 hours
+ * 
+ * @author Erik Sionov
+ *
+ */
 @Component
 public class DailyRemoveCouponsTask {
 	
 	@Autowired
 	AdminService adminService;
-	long initialDelay = 1;
 	
-	@Scheduled(timeUnit = TimeUnit.HOURS, fixedRate = 24, initialDelayString = "PT0.06S")
+	@Scheduled(cron = "0 0 0 * * *")
 	public void run() {
+		deleteExpiredCoupons();
+	}
+	
+	public void runAtApplicationStart() {
+		deleteExpiredCoupons();
+	}
+	
+	private void deleteExpiredCoupons() {
 		System.out.println(">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>");
-		System.out.println(">>> begin scheduled coupon deletion");
+		System.out.println(">> begin scheduled coupon deletion >");
+		System.out.println(">>>>>>> next one in: 24 hours >>>>>>");
 		System.out.println(">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>");
 		adminService.deleteAllOutdatedCoupons(LocalDate.now());
 	}

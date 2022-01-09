@@ -10,30 +10,39 @@ import app.core.services.ClientService;
 import app.core.services.CompanyService;
 import app.core.services.CustomerService;
 
+/**
+ * Login manager to log into system using credentials from DB.
+ * @author Erik Sionov
+ *
+ */
 @Component
 public class LoginManager {
-	
+
 	@Autowired
 	private ApplicationContext ctx;
-	
-	/** login manager to log into system using credentials from DB.
-	 * while <code>ClientType</code> used to indicate the DB login() method used from one of the client services.
-	 * @param email user email
-	 * @param password user password
-	 * @param clientType enum based on client types
-	 * @return 
-	 * @return a service type based by ClientType enum
-	 * @throws CouponSystemException if login would fail for some reason
+
+	/** used to login into the system.
+	 *  While <code>ClientType</code> used to indicate the DB login() method used from one of the client services.
+	 * 
+	 * @param email
+	 *            user email
+	 * @param password
+	 *            user password
+	 * @param clientType
+	 *            enum based on client types
+	 * @return AdminService, CompanyService or CustomerService, based on ClientType enum used.
+	 * @throws CouponSystemException
+	 *             if login would fail for some reason
 	 */
 	public ClientService login(String email, String password, ClientType clientType) throws CouponSystemException {
-		
+
 		try {
 			switch (clientType) {
 				case ADMINISTRATOR :
 					AdminService adminF = ctx.getBean(AdminService.class);
 					if (adminF.login(email, password)) {
 						return adminF;
-					}else {
+					} else {
 						adminF = null;
 						return null;
 					}
@@ -53,7 +62,7 @@ public class LoginManager {
 					}
 					custF = null;
 					return null;
-					
+
 				default :
 					System.out.println("login() in loginManager failed, clientType not supported");
 					return null;
@@ -66,4 +75,3 @@ public class LoginManager {
 	}
 
 }
-

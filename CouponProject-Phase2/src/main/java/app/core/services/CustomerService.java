@@ -23,12 +23,16 @@ public class CustomerService extends ClientService {
 
 	@Override
 	public boolean login(String email, String password) throws CustomerServiceException {
-		Customer customer = customerRepository.findByEmailAndPassword(email, password);
-		if (customer != null) {
-			customerId = customer.getId();
-			return true;
-		} else {
-			return false;
+		try {
+			Customer customer = customerRepository.findByEmailAndPassword(email, password);
+			if (customer != null) {
+				customerId = customer.getId();
+				return true;
+			} else {
+				return false;
+			}
+		} catch (Exception e) {
+			throw new CustomerServiceException("customer Login() ERROR: " + e.getMessage());
 		}
 	}
 

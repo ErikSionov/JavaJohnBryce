@@ -20,20 +20,29 @@ import app.core.exceptions.CouponSystemException;
 @Scope("prototype")
 public class AdminService extends ClientService {
 
-	@Value("${admin.email}")
+	@Value("${admin.email:admin@admin.com}")
 	private String emailProp;
-	@Value("${admin.pass}")
+	@Value("${admin.pass:admin}")
 	private String passProp;
 
 	@Override
 	public boolean login(String email, String password) throws AdminServiceException {
-		if (email.equals(emailProp) && password.equals(passProp)) {
-			return true;
-		} else {
-			return false;
+		try {
+			if (email.equals(emailProp) && password.equals(passProp)) {
+				return true;
+			} else {
+				return false;
+			}
+		} catch (Exception e) {
+			throw new AdminServiceException("admin Login() ERROR: " + e.getMessage());
 		}
 	}
 
+	/**Adds a new company to the DB. the company mustn't have a similar name and email to existing company in the DB.
+	 * 
+	 * @param company company to be added.
+	 * @throws AdminServiceException in case of error.
+	 */
 	public void addCompany(Company company) throws AdminServiceException {
 		try {
 			List<Company> companies = companyRepository.findByNameOrEmail(company.getName(), company.getEmail());
@@ -48,6 +57,11 @@ public class AdminService extends ClientService {
 		}
 	}
 
+	/**Updates already present company in DB, can't update Id or Name of the company
+	 * 
+	 * @param company company entity to that needs updating
+	 * @throws AdminServiceException in case of error.
+	 */
 	public void updateCompany(Company company) throws AdminServiceException {
 		try {
 			Company c = getCompany(company.getId());
@@ -68,6 +82,11 @@ public class AdminService extends ClientService {
 		}
 	}
 
+	/**Delete a company by it's companyId, while doing so ALSO will delete all company's coupons and their purchases.
+	 * 
+	 * @param companyId Company's id to delete
+	 * @throws AdminServiceException if any error occurs.
+	 */
 	public void deleteCompany(int companyId) throws AdminServiceException {
 		Company company = companyRepository.getById(companyId);
 		if (company != null) {
@@ -77,10 +96,20 @@ public class AdminService extends ClientService {
 		}
 	}
 
+	/**Retrieves a list of all companies in the DB
+	 * 
+	 * @return list of Company() objects
+	 */
 	public List<Company> getAllCompanies() {
 		return companyRepository.findAll();
 	}
 
+	/**Retrieves one company by it's Id from DB
+	 * 
+	 * @param companyId
+	 * @return one Company() object
+	 * @throws AdminServiceException
+	 */
 	public Company getCompany(int companyId) throws AdminServiceException {
 		Optional<Company> opt = companyRepository.findById(companyId);
 		if (opt.isPresent()) {
@@ -90,6 +119,11 @@ public class AdminService extends ClientService {
 		}
 	}
 
+	/**Adds a new customer to the DB, mustn't have the same email as an existing customer
+	 * 
+	 * @param customer Customer() object to be added to the DB
+	 * @throws AdminServiceException
+	 */
 	public void addCustomer(Customer customer) throws AdminServiceException {
 		try {
 			List<Customer> list = customerRepository.findByFirstNameOrEmail(null, customer.getEmail());
@@ -104,6 +138,11 @@ public class AdminService extends ClientService {
 		}
 	}
 
+	/**Update a customer in DB, can't update it's Id.
+	 * 
+	 * @param customer customer() object to update.
+	 * @throws AdminServiceException
+	 */
 	public void updateCustomer(Customer customer) throws AdminServiceException {
 		try {
 			Optional<Customer> opt = customerRepository.findById(customer.getId());
@@ -121,6 +160,11 @@ public class AdminService extends ClientService {
 		}
 	}
 
+	/**Delete a customer from DB using it's customerId, also deletes all coupon purchases by the customer.
+	 * 
+	 * @param customerId customer's Id to delete
+	 * @throws AdminServiceException
+	 */
 	public void deleteCustomer(int customerId) throws AdminServiceException {
 		Customer customer = getCustomer(customerId);
 		if (customer != null) {
@@ -130,6 +174,12 @@ public class AdminService extends ClientService {
 		}
 	}
 
+	/**Retrieves one customer() object from DB by its customerId
+	 * 
+	 * @param customerId
+	 * @return Customer() object from DB without it's coupons list.
+	 * @throws AdminServiceException
+	 */
 	public Customer getCustomer(int customerId) throws AdminServiceException {
 		Optional<Customer> opt = customerRepository.findById(customerId);
 		if (opt.isPresent()) {
@@ -139,6 +189,12 @@ public class AdminService extends ClientService {
 		}
 	}
 	
+	/**Retrieves one customer() object from DB by its customerId with it's coupons.
+	 * 
+	 * @param customerId
+	 * @return Customer() object from DB with coupon list.
+	 * @throws AdminServiceException
+	 */
 	public Customer getCustomerWithCoupons(int customerId) throws AdminServiceException {
 		Customer customer = customerRepository.findByIdAndFetchCoupons(customerId);
 		if (customer != null) {
@@ -148,6 +204,10 @@ public class AdminService extends ClientService {
 		}
 	}
 	
+	/**Retrieves a list of customer() objects from DB
+	 * 
+	 * @return list of Customer() objects
+	 */
 	public List<Customer> getAllCustomer() {
 		return customerRepository.findAll();
 	}
